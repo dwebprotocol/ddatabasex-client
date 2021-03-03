@@ -13,9 +13,9 @@ const DHubClient = require('@dhub/client')
 
 const client = new DHubClient() // connect to the dHub server
 
-const dwebvault = client.dwebvault() // make a dWebVault
+const basestore = client.basestore() // make a BaseStore
 
-const feed = dwebvault.get(someDDatabaseKey) // make a dDatabase
+const feed = basestore.get(someDDatabaseKey) // make a dDatabase
 
 await feed.get(42) // get some data from the dDatabase
 ```
@@ -54,42 +54,42 @@ Fully close the client. Cancels all inflight requests.
 
 Wait for the client to have fully connected and loaded initial data.
 
-#### `corestore = client.dwebvault([namespace])`
+#### `corestore = client.basestore([namespace])`
 
-Make a new remote dWebVault. Optionally you can pass a specific namespace
-to load a specific dWebVault. If you do not pass a namespace a random one is generated for you.
+Make a new remote BaseStore. Optionally you can pass a specific namespace
+to load a specific BaseStore. If you do not pass a namespace a random one is generated for you.
 
 #### `client.network`
 
-The remote dWebVault network instance.
+The remote BaseStore network instance.
 
 #### `client.replicate(vault)`
 
 A one-line replication function for `RemoteDDatabases` (see below for details).
 
-## Remote dWebVault
+## Remote BaseStore
 
-The remote dWebVault instances has an API that mimicks the normal [dwebvault](https://github.com/corestore) API.
+The remote BaseStore instances has an API that mimicks the normal [basestore](https://github.com/dwebprotocol/basestore) API.
 
-#### `feed = dwebvault.get([key])`
+#### `feed = basestore.get([key])`
 
 Make a new remote dDatabase instance. If you pass a key that specific feed is loaded, if not a new one is made.
 
-#### `feed = dwebvault.default()`
+#### `feed = basestore.default()`
 
-Get the "default" feed for this dWebVault, which is derived from the namespace.
+Get the "default" feed for this BaseStore, which is derived from the namespace.
 
 #### `feed.name`
 
-The name (namespace) of this dWebVault.
+The name (namespace) of this BaseStore.
 
 #### `async feed.close([callback])`
 
-Close the dWebVault. Closes all feeds made in this dWebVault.
+Close the BaseStore. Closes all feeds made in this BaseStore.
 
 ## Remote Networker
 
-The remote networker instance has an API that mimicks the normal [dwebvault networker](https://github.com/corestore-networker) API.
+The remote networker instance has an API that mimicks the normal [basestore networker](https://github.com/dwebprotocol/basestore-networker) API.
 
 #### `await network.ready([callback])`
 
@@ -128,7 +128,7 @@ Register a network protocol extension.
 
 ## Remote Feed
 
-The remote feed instances has an API that mimicks the normal [dDatabase](https://github.com/protocol/hypercore) API.
+The remote feed instances has an API that mimicks the normal [dDatabase](https://github.com/dwebprotocol/ddatabase) API.
 
 #### `feed.key`
 
@@ -160,7 +160,7 @@ Options include:
 }
 ```
 
-See the [dDatabase docs](https://github.com/protocol/hypercore) for more info on these options.
+See the [dDatabase docs](https://github.com/dwebprotocol/ddatabase) for more info on these options.
 
 Note if you don't await the promise straight away you can use it to to cancel the operation, later using `feed.cancel`
 
@@ -203,7 +203,7 @@ Options include:
 }
 ```
 
-See the [dDatabase docs](https://github.com/protocol/hypercore) for more info on these options.
+See the [dDatabase docs](https://github.com/dwebprotocol/ddatabase) for more info on these options.
 
 #### `await feed.append(blockOrArrayOfBlocks, [callback])`
 
@@ -236,12 +236,12 @@ Emitted when a block is uploaded. `data` is a pseudo-buffer with `{length, byteL
 ## Replicator
 
 dHub also includes a simple replication function for `RemoteDDatabases` that does two things:
-1. It first configures the network (`client.network.configure(core, { announce: true, lookup: true })`)
-2. Then it does a `dwebvault.update({ ifAvailable: true })` to try to fetch the latest length from the network.
+1. It first configures the network (`client.network.configure(base, { announce: true, lookup: true })`)
+2. Then it does a `basestore.update({ ifAvailable: true })` to try to fetch the latest length from the network.
 
 This saves a bit of time when swarming a `RemoteDDatabase`.
 
-#### `await replicate(core)`
+#### `await replicate(base)`
 
 Quickly connect a `RemoteDDatabase` to the dWeb network.
 
