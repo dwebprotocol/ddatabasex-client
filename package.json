@@ -1,0 +1,33 @@
+{
+  "name": "@dhub/client",
+  "version": "0.0.0",
+  "description": "Standalone dHub RPC client",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwebprotocol/dhub-client.git"
+  },
+  "keywords": [
+    "ddatabase",
+    "dhub",
+    "rpc"
+  ],
+  "author": "PeepsLabs <peepslabs@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dwebprotocol/dhub-client/issues"
+  },
+  "homepage": "https://dwebx.org",
+  "dependencies": {
+    "@dhub/rpc": "git://github.com/dwebprotocol/dhub-rpc.git#c8d87231ab41b7e6957dad628c49860a8b776144",
+    "call-me-maybe": "^1.0.1",
+    "codecs": "^2.1.0",
+    "@ddatabase/crypto": "^1.0.0",
+    "@ddatabase/streams": "^1.0.0",
+    "inspect-custom-symbol": "^1.1.1",
+    "nanoresource-promise": "^1.2.2"
+  }
+}
