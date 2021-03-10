@@ -1,6 +1,6 @@
 {
   "name": "@dhub/client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Standalone dHub RPC client",
   "main": "index.js",
   "scripts": {

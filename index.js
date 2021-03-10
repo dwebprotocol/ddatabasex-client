@@ -85,7 +85,7 @@ class RemoteBasestore extends EventEmitter {
         remoteBase._onupload({ seq, byteLength })
       }
     })
-    this._client.basestore.onRequest(this, {
+    this._client.basestorevault.onRequest(this, {
       onFeed ({ key }) {
         return this._onfeed(key)
       }
@@ -432,7 +432,7 @@ class RemoteDDatabase extends Nanoresource {
 
   async _open () {
     if (this.lazy) this._id = this._sessions.create(this)
-    const rsp = await this._client.basestore.open({
+    const rsp = await this._client.basestorevault.open({
       id: this._id,
       name: this._name,
       key: this.key,
@@ -895,10 +895,10 @@ module.exports = class DHubClient {
 
     this._socketOpts = getNetworkOptions(opts)
     this._client = DRPC.connect(this._socketOpts)
-    this._corestore = new RemoteBasestore({ client: this._client, sessions })
+    this._basestorevault = new RemoteBasestore({ client: this._client, sessions })
 
     this.network = new RemoteNetworker({ client: this._client, sessions })
-    this.basestore = (name) => this._corestore.namespace(name)
+    this.basestorevault = (name) => this._basestorevault.namespace(name)
     // Exposed like this so that you can destructure: const { replicate } = new Client()
     this.replicate = (base, cb) => maybeOptional(cb, this._replicate(base))
   }
@@ -926,11 +926,11 @@ module.exports = class DHubClient {
   }
 
   status (cb) {
-    return maybe(cb, this._client.hyperspace.status())
+    return maybe(cb, this._client.dhub.status())
   }
 
   stop (cb) {
-    return maybe(cb, this._client.hyperspace.stopNoReply())
+    return maybe(cb, this._client.dhub.stopNoReply())
   }
 
   close () {
