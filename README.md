@@ -13,9 +13,9 @@ const DHubClient = require('@dhub/client')
 
 const client = new DHubClient() // connect to the dHub server
 
-const basestorevault = client.basestorevault() // make a basestorevault
+const basestore = client.basestore() // make a basestore
 
-const feed = basestorevault.get(someDDatabaseKey) // make a dDatabase
+const feed = basestore.get(someDDatabaseKey) // make a dDatabase
 
 await feed.get(42) // get some data from the dDatabase
 ```
@@ -54,42 +54,42 @@ Fully close the client. Cancels all inflight requests.
 
 Wait for the client to have fully connected and loaded initial data.
 
-#### `basestorevault = client.basestorevault([namespace])`
+#### `basestore = client.basestore([namespace])`
 
-Make a new remote basestorevault. Optionally you can pass a specific namespace
-to load a specific basestorevault. If you do not pass a namespace a random one is generated for you.
+Make a new remote basestore. Optionally you can pass a specific namespace
+to load a specific basestore. If you do not pass a namespace a random one is generated for you.
 
 #### `client.network`
 
-The remote basestorevault network instance.
+The remote basestore network instance.
 
 #### `client.replicate(vault)`
 
 A one-line replication function for `RemoteDDatabases` (see below for details).
 
-## Remote basestorevault
+## Remote basestore
 
-The remote basestorevault instances has an API that mimicks the normal [basestorevault](https://github.com/dwebprotocol/basestorevault) API.
+The remote basestore instances has an API that mimicks the normal [basestore](https://github.com/dwebprotocol/basestore) API.
 
-#### `feed = basestorevault.get([key])`
+#### `feed = basestore.get([key])`
 
 Make a new remote dDatabase instance. If you pass a key that specific feed is loaded, if not a new one is made.
 
-#### `feed = basestorevault.default()`
+#### `feed = basestore.default()`
 
-Get the "default" feed for this basestorevault, which is derived from the namespace.
+Get the "default" feed for this basestore, which is derived from the namespace.
 
 #### `feed.name`
 
-The name (namespace) of this basestorevault.
+The name (namespace) of this basestore.
 
 #### `async feed.close([callback])`
 
-Close the basestorevault. Closes all feeds made in this basestorevault.
+Close the basestore. Closes all feeds made in this basestore.
 
 ## Remote Networker
 
-The remote networker instance has an API that mimicks the normal [basestorevault networker](https://github.com/dwebprotocol/basestorevault-networker) API.
+The remote networker instance has an API that mimicks the normal [basestore networker](https://github.com/dwebprotocol/basestore-networker) API.
 
 #### `await network.ready([callback])`
 
@@ -237,7 +237,7 @@ Emitted when a block is uploaded. `data` is a pseudo-buffer with `{length, byteL
 
 dHub also includes a simple replication function for `RemoteDDatabases` that does two things:
 1. It first configures the network (`client.network.configure(base, { announce: true, lookup: true })`)
-2. Then it does a `basestorevault.update({ ifAvailable: true })` to try to fetch the latest length from the network.
+2. Then it does a `basestore.update({ ifAvailable: true })` to try to fetch the latest length from the network.
 
 This saves a bit of time when swarming a `RemoteDDatabase`.
 
