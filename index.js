@@ -13,12 +13,12 @@ const net = require('net')
 
 class Sessions {
   constructor () {
-    this._cores = new FreeMap()
+    this._bases = new FreeMap()
     this._resourceCounter = 0
   }
 
   create (remoteBase) {
-    return this._cores.add(remoteBase)
+    return this._bases.add(remoteBase)
   }
 
   createResourceId () {
@@ -26,11 +26,11 @@ class Sessions {
   }
 
   delete (id) {
-    this._cores.free(id)
+    this._bases.free(id)
   }
 
   get (id) {
-    return this._cores.get(id)
+    return this._bases.get(id)
   }
 }
 
