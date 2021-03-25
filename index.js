@@ -7,7 +7,7 @@ const { WriteStream, ReadStream } = require('@ddatabase/streams')
 const PROMISES = Symbol.for('ddatabase.promises')
 
 const { NanoresourcePromise: Nanoresource } = require('nanoresource-promise/emitter')
-const DRPC = require('@dhub/rpc')
+const DWRPC = require('@dhub/rpc')
 const getNetworkOptions = require('@dhub/rpc/socket')
 const net = require('net')
 
@@ -894,7 +894,7 @@ module.exports = class DHubClient {
     const sessions = new Sessions()
 
     this._socketOpts = getNetworkOptions(opts)
-    this._client = DRPC.connect(this._socketOpts)
+    this._client = DWRPC.connect(this._socketOpts)
     this._basestore = new RemoteBasestore({ client: this._client, sessions })
 
     this.network = new RemoteNetworker({ client: this._client, sessions })
