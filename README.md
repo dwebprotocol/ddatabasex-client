@@ -1,9 +1,9 @@
-# @hyperspace/client
+# @dhub/client
 
-Standalone Hyperspace RPC client
+Standalone dhub RPC client
 
 ```
-npm install @hyperspace/client
+npm install @dhub/client
 ```
 
 # License

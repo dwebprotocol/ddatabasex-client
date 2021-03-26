@@ -1,12 +1,12 @@
 const { EventEmitter } = require('events')
 const maybe = require('call-me-maybe')
 const codecs = require('codecs')
-const hypercoreCrypto = require('ddatabase-crypto')
+const ddatabaseCrypto = require('@ddatabase/crypto')
 const inspect = require('inspect-custom-symbol')
 const { WriteStream, ReadStream } = require('@ddatabase/streams')
 
 const { NanoresourcePromise: Nanoresource } = require('nanoresource-promise/emitter')
-const DRPC = require('@dhub/rpc')
+const DWRPC = require('@dhub/rpc')
 const getSocketName = require('@dhub/rpc/socket')
 
 class Sessions {
@@ -14,12 +14,12 @@ class Sessions {
     this._counter = 0
     this._resourceCounter = 0
     this._freeList = []
-    this._remoteCores = new Map()
+    this._remoteBases = new Map()
   }
 
   create (remoteBase) {
     const id = this._freeList.length ? this._freeList.pop() : this._counter++
-    this._remoteCores.set(id, remoteBase)
+    this._remoteBases.set(id, remoteBase)
     return id
   }
 
@@ -28,12 +28,12 @@ class Sessions {
   }
 
   delete (id) {
-    this._remoteCores.delete(id)
+    this._remoteBases.delete(id)
     this._freeList.push(id)
   }
 
   get (id) {
-    return this._remoteCores.get(id)
+    return this._remoteBases.get(id)
   }
 }
 
@@ -71,7 +71,7 @@ class RemoteBasestore extends EventEmitter {
         remoteBase._onextension({ resourceId, remotePublicKey, data })
       }
     })
-    this._client.basestorevault.onRequest(this, {
+    this._client.basestore.onRequest(this, {
       onFeed ({ key }) {
         return this._onfeed(key)
       }
@@ -221,14 +221,14 @@ class RemoteDDatabase extends Nanoresource {
 
   async _open () {
     if (this.lazy) this._id = this._sessions.create(this)
-    const rsp = await this._client.basestorevault.open({
+    const rsp = await this._client.basestore.open({
       id: this._id,
       name: this._name,
       key: this.key,
       weak: this.weak
     })
     this.key = rsp.key
-    this.discoveryKey = hypercoreCrypto.discoveryKey(this.key)
+    this.discoveryKey = ddatabaseCrypto.discoveryKey(this.key)
     this.writable = rsp.writable
     this.length = rsp.length
     this.byteLength = rsp.byteLength
@@ -577,8 +577,8 @@ module.exports = class DHubClient extends Nanoresource {
   constructor (opts = {}) {
     super()
     this._sock = getSocketName(opts.host)
-    this._client = DRPC.connect(this._sock)
-    this.basestorevault = new RemoteBasestore({ client: this._client })
+    this._client = DWRPC.connect(this._sock)
+    this.basestore = new RemoteBasestore({ client: this._client })
     this.network = new RemoteNetworker({ client: this._client })
     this.plugins = new RemotePlugins({ client: this._client })
   }
