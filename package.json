@@ -22,7 +22,7 @@
   },
   "homepage": "https://dwebx.org",
   "dependencies": {
-    "@dhub/rpc": "git://github.com/dwebprotocol/dhub-rpc.git#c8d87231ab41b7e6957dad628c49860a8b776144",
+    "@dhub/rpc": "git://github.com/dwebprotocol/dhub-rpc.git#2715b958cab85c8d89ab8e0c708917aca927e076",
     "call-me-maybe": "^1.0.1",
     "codecs": "^2.1.0",
     "@ddatabase/crypto": "^1.0.0",
